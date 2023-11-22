@@ -4,7 +4,6 @@ using BEAST
 using LinearAlgebra
 using StaticArrays
     
-#TEST GIT
 
 ω = (2*pi)*1e7
 f= ω/(2*pi)
