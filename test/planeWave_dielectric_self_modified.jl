@@ -1,9 +1,11 @@
 using SphericalScattering
 using Test
-using BEAST
-using LinearAlgebra
+
+#using JuliaFormatter
 using StaticArrays
-    
+using BEAST
+using CompScienceMeshes
+using LinearAlgebra
 
 ω = (2*pi)*1e7
 f= ω/(2*pi)
@@ -12,6 +14,7 @@ f= ω/(2*pi)
 𝜀 = SphericalScattering.ε0
 #𝜇 = 1.0
 #𝜀 = 1.0
+
 
 # Embedding
 μ2 =𝜇 * 1.0
@@ -35,8 +38,8 @@ k1 = 2π * f / c1
 
 # BASIS AUF DEM RAND DER KUGEL
 spRadius=1.0
-meshparam=0.2
-sphere = BEAST.meshsphere(spRadius, meshparam) # das ist jetzt nur die Kugelfläche!!!!!!
+meshparam=0.3
+sphere = meshsphere(spRadius, meshparam) # das ist jetzt nur die Kugelfläche!!!!!!
 
 RT=raviartthomas(sphere)
 
@@ -113,8 +116,8 @@ EF₁ = scatteredfield(sp, ex, ElectricField(points_cartNF_inside))
 diff_EF₂ = norm.(EF₂ - EF₂MoM) ./ maximum(norm.(EF₂))  # worst case error
 diff_EF₁ = norm.(EF₁ - EF₁MoM) ./ maximum(norm.(EF₁))  # worst case error
 
-#@test maximum(20 * log10.(abs.(diff_EF₂))) < -25 # dB 
-#@test maximum(20 * log10.(abs.(diff_EF₁))) < -25 # dB 
+@test maximum(20 * log10.(abs.(diff_EF₂))) < -25 # dB 
+@test maximum(20 * log10.(abs.(diff_EF₁))) < -25 # dB 
 
 @show maximum(abs.(diff_EF₂))
 @show maximum(abs.(diff_EF₁))
@@ -131,8 +134,8 @@ HF₁ = scatteredfield(sp, ex, MagneticField(points_cartNF_inside))
 diff_HF₂ = norm.(HF₂ - HF₂MoM) ./ maximum(norm.(HF₂))  # worst case error
 diff_HF₁ = norm.(HF₁ - HF₁MoM) ./ maximum(norm.(HF₁))  # worst case error
 
-#@test maximum(20 * log10.(abs.(diff_HF₂))) < -24 # dB 
-#@test maximum(20 * log10.(abs.(diff_HF₁))) < -25 # dB 
+@test maximum(20 * log10.(abs.(diff_HF₂))) < -24 # dB 
+@test maximum(20 * log10.(abs.(diff_HF₁))) < -25 # dB 
 
 @show maximum(abs.(diff_HF₂))
 @show maximum(abs.(diff_HF₁))
@@ -145,5 +148,5 @@ FF = scatteredfield(sp, ex, FarField(points_cartFF))
 
 diff_FF = norm.(FF - FF_MoM) ./ maximum(norm.(FF))  # worst case error
 @show maximum(abs.(diff_FF))
-#@test maximum(20 * log10.(abs.(diff_FF))) < -24 # dB
+@test maximum(20 * log10.(abs.(diff_FF))) < -24 # dB
 
